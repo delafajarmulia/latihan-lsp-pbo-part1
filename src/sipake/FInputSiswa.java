@@ -32,7 +32,7 @@ public class FInputSiswa extends javax.swing.JFrame {
     Koneksi getCon = new Koneksi();
     ResultSet res;
     Statement stm;
-    String sql;
+    String sql, nis;
     
     public FInputSiswa() {
         initComponents();
@@ -56,6 +56,18 @@ public class FInputSiswa extends javax.swing.JFrame {
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(FInputSiswa.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private void clear(){
+        txt_nis.setText("");
+        txt_nama.setText("");
+        txt_tempat.setText("");
+        
+        // untuk set tanggal saat ini
+        date_lahir.setDate(new Date());
+        
+        // untuk set default data in cmb
+        cmb_jk.setSelectedItem("Laki-laki");
     }
     
     private void tampilData() throws SQLException, ClassNotFoundException{
@@ -110,7 +122,6 @@ public class FInputSiswa extends javax.swing.JFrame {
         table_siswa = new javax.swing.JTable();
         jLabel7 = new javax.swing.JLabel();
         txt_cari = new javax.swing.JTextField();
-        btn_cari = new javax.swing.JButton();
         date_lahir = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -175,10 +186,9 @@ public class FInputSiswa extends javax.swing.JFrame {
 
         jLabel7.setText("cari data");
 
-        btn_cari.setText("Cari");
-        btn_cari.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cariActionPerformed(evt);
+        txt_cari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txt_cariKeyPressed(evt);
             }
         });
 
@@ -189,45 +199,42 @@ public class FInputSiswa extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(27, 27, 27)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel5)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jLabel3)
-                            .addComponent(jLabel4)
-                            .addComponent(jLabel6)
-                            .addComponent(btn_simpan)
-                            .addComponent(jLabel7))
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
                             .addGroup(layout.createSequentialGroup()
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(16, 16, 16))
+                                    .addComponent(jLabel2)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jLabel4)
+                                    .addComponent(jLabel6)
+                                    .addComponent(btn_simpan)
+                                    .addComponent(jLabel7))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(50, 50, 50)
+                                            .addComponent(jLabel1))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addGap(32, 32, 32)
+                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                                .addComponent(date_lahir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(txt_nis)
+                                                .addComponent(txt_nama)
+                                                .addComponent(txt_tempat)
+                                                .addComponent(cmb_jk, 0, 192, Short.MAX_VALUE))))
                                     .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(50, 50, 50)
-                                                .addComponent(jLabel1))
-                                            .addGroup(layout.createSequentialGroup()
-                                                .addGap(32, 32, 32)
-                                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                                    .addComponent(date_lahir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addComponent(txt_nis)
-                                                    .addComponent(txt_nama)
-                                                    .addComponent(txt_tempat)
-                                                    .addComponent(cmb_jk, 0, 192, Short.MAX_VALUE))))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                                .addComponent(btn_cari))
-                            .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(btn_add, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btn_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(btn_add, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(btn_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(txt_cari)))))
+                        .addGap(5, 5, 5)))
                 .addContainerGap(13, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -265,9 +272,7 @@ public class FInputSiswa extends javax.swing.JFrame {
                             .addComponent(btn_hapus))
                         .addGap(27, 27, 27)
                         .addComponent(jLabel7))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(btn_cari)))
+                    .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(30, Short.MAX_VALUE))
@@ -277,19 +282,32 @@ public class FInputSiswa extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_editActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_editActionPerformed
-        // TODO add your handling code here:
 
-        DefaultTableModel model = (DefaultTableModel) table_siswa.getModel();
-        int row = table_siswa.getSelectedRow();
-        if(row >= 0){
-            model.setValueAt(txt_nis.getText(), row, 0);
-            model.setValueAt(txt_nama.getText(), row, 1);
-            model.setValueAt(txt_tempat.getText(), row, 2);
-            model.setValueAt(date_lahir.getDate(), row, 3);
-            model.setValueAt(cmb_jk.getSelectedItem(), row, 4);
-        }else{
-            JOptionPane.showMessageDialog(null, "Error");
-       }
+        String newNIS = txt_nis.getText();
+        String nama = txt_nama.getText();
+        String tempat = txt_tempat.getText();
+        String tanggal = MYSQL_DATE_FORMAT.format(date_lahir.getDate());
+        String jk = cmb_jk.getSelectedItem().toString();
+        
+        try{
+            con = null;
+            con = getCon.getKoneksiDB();
+            
+            sql = "UPDATE siswa SET nis='"+newNIS+"', "
+                    + "nama_siswa='"+nama+"',"
+                    + "tempat_lahir='"+tempat+"',"
+                    + "tanggal_lahir='"+tanggal+"',"
+                    + "jenis_kelamin='"+jk+"'"
+                    + " WHERE nis='"+nis+"'";
+            
+            stm = con.createStatement();
+            stm.executeUpdate(sql);
+            
+            loadData();
+            JOptionPane.showMessageDialog(this, "Data berhasil di ubah");
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }//GEN-LAST:event_btn_editActionPerformed
 
     private void btn_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_simpanActionPerformed
@@ -299,12 +317,6 @@ public class FInputSiswa extends javax.swing.JFrame {
         String tempat = txt_tempat.getText();
         String tanggal = MYSQL_DATE_FORMAT.format(date_lahir.getDate());
         String jk = cmb_jk.getSelectedItem().toString();
-//        
-//        Object[] row = {nis, nama, tempat, tanggal, jk};
-//        
-//        DefaultTableModel model = (DefaultTableModel) table_siswa.getModel(); 
-//        
-//        model.addRow(row);
         
         try{
             con = getCon.getKoneksiDB();
@@ -325,15 +337,7 @@ public class FInputSiswa extends javax.swing.JFrame {
 
     private void btn_addActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_addActionPerformed
         // TODO add your handling code here:
-        txt_nis.setText("");
-        txt_nama.setText("");
-        txt_tempat.setText("");
-        
-        // untuk set tanggal saat ini
-        date_lahir.setDate(new Date());
-        
-        // untuk set default data in cmb
-        cmb_jk.setSelectedItem("Laki-laki");
+        clear();
     }//GEN-LAST:event_btn_addActionPerformed
 
     private void table_siswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_siswaMouseClicked
@@ -351,32 +355,65 @@ public class FInputSiswa extends javax.swing.JFrame {
         }
         
         cmb_jk.setSelectedItem(table_siswa.getValueAt(number, 4));
+        
+        nis = txt_nis.getText();
+        //System.out.print(nis);
     }//GEN-LAST:event_table_siswaMouseClicked
 
     private void btn_hapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_hapusActionPerformed
         // TODO add your handling code here:
-        DefaultTableModel model = (DefaultTableModel) table_siswa.getModel();
-        int row = table_siswa.getSelectedRow();
-        if(row >= 0){
-            int ok = JOptionPane.showConfirmDialog(null, "Anda yakin mau hapus?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-            if(ok == 0){
-                model.removeRow(row);
+        var jawab = JOptionPane.showConfirmDialog(this, "Yakin akan menghapus siswa dengan NIS " + nis +"?", "Konfirmasi", JOptionPane.DEFAULT_OPTION);
+        if(jawab == JOptionPane.YES_OPTION){
+            try{
+                con = null;
+                con = getCon.getKoneksiDB();
+                sql = "DELETE FROM siswa WHERE nis='"+nis+"'";
+                
+                stm = con.createStatement();
+                stm.executeUpdate(sql);
+                clear();
+                loadData();
+                
+                JOptionPane.showMessageDialog(this, "Data berhasil dihapus");
+            }catch(Exception e){
+                JOptionPane.showConfirmDialog(null, "Ada kesalahan input", "Konfirmasi", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE);
             }
         }
+
     }//GEN-LAST:event_btn_hapusActionPerformed
 
-    private void btn_cariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cariActionPerformed
-        // TODO add your handling code here:
-        //searchTableContents(txt_cari.getText());
-        String cari = txt_cari.getText();
-        
-    }//GEN-LAST:event_btn_cariActionPerformed
-
-    public void searchTableContents(String searchString){
-        DefaultTableModel model = (DefaultTableModel) table_siswa.getModel();
-        model.setRowCount(0);
-        //for(Object rows : originalTableModel){}
+    private void cariData(String key){
+        try{
+            con = null;
+            con = getCon.getKoneksiDB();
+            
+            sql = "SELECT * FROM siswa WHERE nama_siswa LIKE '%"+key+"%'";
+            siswa.getDataVector().removeAllElements();
+            
+            stm = con.createStatement();
+            res = stm.executeQuery(sql);
+            
+            while(res.next()){
+                Object[] data = {
+                    res.getString("nis"),
+                    res.getString("nama_siswa"),
+                    res.getString("tempat_lahir"),
+                    res.getString("tanggal_lahir"),
+                    res.getString("jenis_kelamin")
+                };
+                siswa.addRow(data);
+            }
+        }catch(Exception e){
+            System.out.println(e);
+        }
     }
+    
+    private void txt_cariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cariKeyPressed
+        // TODO add your handling code here:
+        String key = txt_cari.getText();
+        cariData(key);
+    }//GEN-LAST:event_txt_cariKeyPressed
+
     /**
      * @param args the command line arguments
      */
@@ -414,7 +451,6 @@ public class FInputSiswa extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btn_add;
-    private javax.swing.JButton btn_cari;
     private javax.swing.JButton btn_edit;
     private javax.swing.JButton btn_hapus;
     private javax.swing.JButton btn_simpan;
