@@ -18,7 +18,7 @@ public class Koneksi {
     
 //    public static void main(String [] args){
 //    }
-    
+     
     public static Connection getKoneksiDB() throws ClassNotFoundException, SQLException{
         if(con == null){
             try{

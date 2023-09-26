@@ -123,6 +123,7 @@ public class FInputSiswa extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         txt_cari = new javax.swing.JTextField();
         date_lahir = new com.toedter.calendar.JDateChooser();
+        cmbSearch = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -192,6 +193,8 @@ public class FInputSiswa extends javax.swing.JFrame {
             }
         });
 
+        cmbSearch.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "NIS", "Nama" }));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -211,7 +214,7 @@ public class FInputSiswa extends javax.swing.JFrame {
                                     .addComponent(jLabel6)
                                     .addComponent(btn_simpan)
                                     .addComponent(jLabel7))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addGroup(layout.createSequentialGroup()
                                             .addGap(50, 50, 50)
@@ -223,16 +226,18 @@ public class FInputSiswa extends javax.swing.JFrame {
                                                 .addComponent(txt_nis)
                                                 .addComponent(txt_nama)
                                                 .addComponent(txt_tempat)
-                                                .addComponent(cmb_jk, 0, 192, Short.MAX_VALUE))))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(btn_add, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addComponent(btn_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
+                                                .addComponent(cmb_jk, 0, 192, Short.MAX_VALUE)))
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                            .addComponent(btn_add, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(btn_edit, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addGap(18, 18, 18)
+                                            .addComponent(btn_hapus, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(cmbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(18, 18, 18)
                                         .addComponent(txt_cari)))))
                         .addGap(5, 5, 5)))
                 .addContainerGap(13, Short.MAX_VALUE))
@@ -270,12 +275,14 @@ public class FInputSiswa extends javax.swing.JFrame {
                             .addComponent(btn_add)
                             .addComponent(btn_edit)
                             .addComponent(btn_hapus))
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel7))
+                        .addGap(24, 24, 24)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(cmbSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(txt_cari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(30, Short.MAX_VALUE))
+                .addContainerGap(27, Short.MAX_VALUE))
         );
 
         pack();
@@ -382,7 +389,7 @@ public class FInputSiswa extends javax.swing.JFrame {
 
     }//GEN-LAST:event_btn_hapusActionPerformed
 
-    private void cariData(String key){
+    private void cariDataByName(String key){
         try{
             con = null;
             con = getCon.getKoneksiDB();
@@ -408,10 +415,45 @@ public class FInputSiswa extends javax.swing.JFrame {
         }
     }
     
+    private void cariDataByNIS(String key) throws ClassNotFoundException{
+        try{
+            con = null;
+            con = getCon.getKoneksiDB();
+            
+            sql = "SELECT * FROM siswa WHERE nis LIKE '%"+key+"%'";
+            siswa.getDataVector().removeAllElements();
+            
+            stm = con.createStatement();
+            res = stm.executeQuery(sql);
+            
+            while(res.next()){
+                Object[] data = {
+                    res.getString("nis"),
+                    res.getString("nama_siswa"),
+                    res.getString("tempat_lahir"),
+                    res.getString("tanggal_lahir"),
+                    res.getString("jenis_kelamin")
+                };
+                siswa.addRow(data);
+            }
+        }catch(SQLException e){
+            System.out.println(e);
+        }
+    }
+    
     private void txt_cariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_cariKeyPressed
         // TODO add your handling code here:
         String key = txt_cari.getText();
-        cariData(key);
+        String searchBy = cmbSearch.getSelectedItem().toString();
+        if(searchBy == "NIS"){
+            try {
+                cariDataByNIS(key);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(FInputSiswa.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }else{
+            cariDataByName(key);
+        }
     }//GEN-LAST:event_txt_cariKeyPressed
 
     /**
@@ -454,6 +496,7 @@ public class FInputSiswa extends javax.swing.JFrame {
     private javax.swing.JButton btn_edit;
     private javax.swing.JButton btn_hapus;
     private javax.swing.JButton btn_simpan;
+    private javax.swing.JComboBox<String> cmbSearch;
     private javax.swing.JComboBox<String> cmb_jk;
     private com.toedter.calendar.JDateChooser date_lahir;
     private javax.swing.JLabel jLabel1;
