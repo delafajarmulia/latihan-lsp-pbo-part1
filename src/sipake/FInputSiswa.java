@@ -319,7 +319,7 @@ public class FInputSiswa extends javax.swing.JFrame {
 
     private void btn_simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_simpanActionPerformed
         // TODO add your handling code here:
-        String nis = txt_nis.getText();
+        String nisNew = txt_nis.getText();
         String nama = txt_nama.getText();
         String tempat = txt_tempat.getText();
         String tanggal = MYSQL_DATE_FORMAT.format(date_lahir.getDate());
@@ -327,7 +327,7 @@ public class FInputSiswa extends javax.swing.JFrame {
         
         try{
             con = getCon.getKoneksiDB();
-            sql = "INSERT INTO siswa(nis, nama_siswa, tempat_lahir, tanggal_lahir, jenis_kelamin) VALUES('"+nis+"','"+nama+"','"+tempat+"','"+tanggal+"','"+jk+"')";
+            sql = "INSERT INTO siswa(nis, nama_siswa, tempat_lahir, tanggal_lahir, jenis_kelamin) VALUES('"+nisNew+"','"+nama+"','"+tempat+"','"+tanggal+"','"+jk+"')";
             
             stm = con.createStatement();
             stm.executeUpdate(sql);
@@ -349,7 +349,8 @@ public class FInputSiswa extends javax.swing.JFrame {
 
     private void table_siswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_table_siswaMouseClicked
         int number = table_siswa.getSelectedRow();
-            
+        nis = table_siswa.getValueAt(number, 0).toString();
+        
         txt_nis.setText(table_siswa.getValueAt(number, 0).toString());
         txt_nama.setText(table_siswa.getValueAt(number, 1).toString());
         txt_tempat.setText(table_siswa.getValueAt(number,2).toString());
@@ -363,7 +364,6 @@ public class FInputSiswa extends javax.swing.JFrame {
         
         cmb_jk.setSelectedItem(table_siswa.getValueAt(number, 4));
         
-        nis = txt_nis.getText();
         //System.out.print(nis);
     }//GEN-LAST:event_table_siswaMouseClicked
 
