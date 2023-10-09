@@ -394,7 +394,7 @@ public class FInputSiswa extends javax.swing.JFrame {
             con = null;
             con = getCon.getKoneksiDB();
             
-            sql = "SELECT * FROM siswa WHERE nama_siswa LIKE '%"+key+"%'";
+            sql = "SELECT * FROM siswa WHERE nama_siswa LIKE '%"+key+"%' OR nama_siswa LIKE '"+key+"%' OR nama_siswa LIKE '%"+key+"'";
             siswa.getDataVector().removeAllElements();
             
             stm = con.createStatement();
@@ -420,7 +420,7 @@ public class FInputSiswa extends javax.swing.JFrame {
             con = null;
             con = getCon.getKoneksiDB();
             
-            sql = "SELECT * FROM siswa WHERE nis LIKE '%"+key+"%'";
+            sql = "SELECT * FROM siswa WHERE nis LIKE '%"+key+"%' OR nis LIKE '"+key+"%' OR nis LIKE '%"+key+"'";
             siswa.getDataVector().removeAllElements();
             
             stm = con.createStatement();
@@ -428,11 +428,11 @@ public class FInputSiswa extends javax.swing.JFrame {
             
             while(res.next()){
                 Object[] data = {
-                    res.getString("nis"),
-                    res.getString("nama_siswa"),
-                    res.getString("tempat_lahir"),
-                    res.getString("tanggal_lahir"),
-                    res.getString("jenis_kelamin")
+                    res.getString(1),
+                    res.getString(2),
+                    res.getString(3),
+                    res.getString(4),
+                    res.getString(5)
                 };
                 siswa.addRow(data);
             }
